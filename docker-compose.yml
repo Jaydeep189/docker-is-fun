@@ -1,0 +1,39 @@
+version: '3'
+services:
+  amc:
+    build:
+      context: ./amc
+      dockerfile: Dockerfile
+    volumes:
+      - api-logs:/app/logs
+    ports:
+      - '9000:9000'
+    networks:
+      - mynetwork
+  hello-world:
+    build:
+      context: ./hello-world
+      dockerfile: Dockerfile
+    volumes:
+      - hello-logs:/app/logs
+    ports:
+      - '9001:9001'
+    networks:
+      - mynetwork
+  db:
+    image: postgres:13  # Adjust the version as needed
+    environment:
+      POSTGRES_DB: hello
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: wanted7575
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+volumes:
+  api-logs:
+  hello-logs:
+  db-data:
+networks:
+  mynetwork:
+    driver: bridge
